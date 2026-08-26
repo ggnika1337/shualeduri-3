@@ -16,8 +16,20 @@ export class UsersService {
     return this.userModel.create(createUserDto);
   }
 
-  findAll() {
-    return this.userModel.find();
+  findAll(query: any, ageFrom?: string, ageTo?: string) {
+    const filter = { ...query };
+
+    delete filter.ageFrom;
+    delete filter.ageTo;
+
+    if (ageFrom || ageTo) {
+      filter.age = {};
+
+      if (ageFrom) filter.age.$gte = Number(ageFrom);
+      if (ageTo) filter.age.$lte = Number(ageTo);
+    }
+
+    return this.userModel.find(filter);
   }
 
   async getTotalUsers() {
