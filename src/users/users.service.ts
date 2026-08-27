@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +12,24 @@ export class UsersService {
     @InjectModel(User.name)
     private userModel: Model<User>,
   ) {}
+
+  async onModuleInit() {
+    const productCount = await this.userModel.countDocuments();
+
+    if (productCount === 0) {
+      const dataToInsert: any[] = [];
+      for (let i = 0; i < 150_000; i++) {
+        dataToInsert.push({
+          name: faker.person.fullName(),
+          age: Math.floor(Math.random() * 100) + 1,
+          gender: faker.person.gender(),
+        });
+      }
+
+      await this.userModel.insertMany(dataToInsert);
+      console.log('Seeding complete.');
+    }
+  }
 
   create(createUserDto: CreateUserDto) {
     return this.userModel.create(createUserDto);
@@ -29,12 +48,11 @@ export class UsersService {
       if (ageTo) filter.age.$lte = Number(ageTo);
     }
 
-    return this.userModel.find(filter);
+    return this.userModel.find(filter).skip(0).limit(30);
   }
 
   async getTotalUsers() {
-    const users = await this.userModel.find();
-    return 'total users amount: ' + users.length;
+    return this.userModel.countDocuments();
   }
 
   findOne(id: number) {
