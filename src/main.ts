@@ -15,7 +15,4 @@ async function bootstrap() {
 }
 bootstrap();
 
-// 2) დაამატეთ ლოგირების მექანიზმი, ნახეთ რა დრო ჭირდება თითოეულ რექუესთს. იუზერების წაკითხვაზე დაამატეთ ქეშირება რომ უფრო დააოპტიმიზიროთ თქვენი რისფონს თაიმი.
-
-// რეფერენსი: https://drive.google.com/file/d/1T7kIpOq5jiyAW6G8hxXf5ONb3yUWTCsk/view?usp=drive_link
-// https://github.com/Datodia/Gita-backend-3/commit/c6636606f962556bfd063e54551cb8090e2bbc7b
+// 2) იუზერების წაკითხვაზე დაამატეთ ქეშირება რომ უფრო დააოპტიმიზიროთ თქვენი რისფონს თაიმი.

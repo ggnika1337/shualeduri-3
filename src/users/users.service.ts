@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -6,10 +6,12 @@ import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { faker } from '@faker-js/faker';
 import { QueryParamsDto } from './dto/queryParams.dto';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class UsersService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @InjectModel(User.name)
     private userModel: Model<User>,
   ) {}
@@ -37,7 +39,7 @@ export class UsersService {
     return this.userModel.create(createUserDto);
   }
 
-  findAll({
+  async findAll({
     page = 1,
     take = 10,
     ageFrom,
@@ -46,6 +48,13 @@ export class UsersService {
     gender,
     name,
   }: QueryParamsDto) {
+    // const val = await this.cacheManager.get('users');
+    // if (!val) {
+    //   const resp = await this.userModel.find();
+    //   await this.cacheManager.set('users', resp, 5 * 60 * 1000);
+    //   return resp;
+    // }
+
     const filter: any = {};
 
     if (age) {
