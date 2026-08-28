@@ -23,12 +23,8 @@ export class UsersController {
   }
 
   @Get()
-  findAll(
-    @Query() query,
-    @Query('ageFrom') ageFrom?: string,
-    @Query('ageTo') ageTo?: string,
-  ) {
-    return this.usersService.findAll(query, ageFrom, ageTo);
+  findAll(@Query() query: QueryParamsDto) {
+    return this.usersService.findAll(query);
   }
 
   @Get('/total-users')
