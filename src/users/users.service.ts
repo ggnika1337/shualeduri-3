@@ -48,13 +48,6 @@ export class UsersService {
     gender,
     name,
   }: QueryParamsDto) {
-    // const val = await this.cacheManager.get('users');
-    // if (!val) {
-    //   const resp = await this.userModel.find();
-    //   await this.cacheManager.set('users', resp, 5 * 60 * 1000);
-    //   return resp;
-    // }
-
     const filter: any = {};
 
     if (age) {
@@ -74,11 +67,26 @@ export class UsersService {
       filter.name = { $regex: name, $options: 'i' };
     }
 
+    // const cachedData = await this.cacheManager.get('users');
+
+    // if (!cachedData) {
+    //   console.log('No cached data.');
+    //   const resp = await this.userModel
+    //     .find(filter)
+    //     .skip((page - 1) * take)
+    //     .limit(Number(take));
+    //   await this.cacheManager.set('users', resp, 5 * 60 * 1000);
+    //   return resp;
+    // } else if (cachedData) {
+    //   return cachedData;
+    // }
+
     return this.userModel
       .find(filter)
       .skip((page - 1) * take)
       .limit(Number(take));
   }
+
   async getTotalUsers() {
     return this.userModel.countDocuments();
   }
